@@ -1,5 +1,6 @@
 import { Viewer, Cartesian3, Color, JulianDate, HeightReference, Math as CesiumMath, CallbackProperty, VerticalOrigin, ColorMaterialProperty } from 'cesium';
 import "cesium/Build/Cesium/Widgets/widgets.css";
+import { setupUI } from './ui.js';
 
 const viewer = new Viewer('cesiumContainer', {
     terrainProvider: null,
@@ -18,13 +19,16 @@ const stop = JulianDate.fromIso8601("2024-01-01T00:00:00Z");
 viewer.clock.startTime = start.clone();
 viewer.clock.stopTime = stop.clone();
 viewer.clock.currentTime = start.clone();
-viewer.clock.multiplier = 700000;
+viewer.clock.multiplier = 10000000;
 viewer.clock.shouldAnimate = true;
 viewer.timeline.zoomTo(start, stop);
 
 async function initVisualization() {
   const response = await fetch('./data.json');
   const counties = await response.json();
+
+  //ui setup hivasa
+  setupUI(viewer, counties);
 
   counties.forEach(county => {
     viewer.entities.add({
