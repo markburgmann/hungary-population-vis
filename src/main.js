@@ -1,4 +1,4 @@
-import { Viewer, Cartesian3, Color, JulianDate, HeightReference, Math as CesiumMath } from 'cesium';
+import { Viewer, Cartesian3, Color, JulianDate, HeightReference, Math as CesiumMath, CallbackProperty } from 'cesium';
 import "cesium/Build/Cesium/Widgets/widgets.css";
 
 const viewer = new Viewer('cesiumContainer', {
@@ -31,7 +31,20 @@ async function initVisualization() {
       name: county.name,
       position: Cartesian3.fromDegrees(county.lon, county.lat),
       cylinder: {
-        length: 150000, // fix 150km magasság
+        length: new CallbackProperty((time) => {
+        //Óra ellenőrzése
+        const date = JulianDate.toDate(time);
+        const year = date.getFullYear();
+
+        //Fixalas hogy ne fusson ki a databol (2001-2024)
+        const safeYear = Math.min(Math.max(year, 2001), 2024);
+
+        //Kivesszük a népességet a jsonbol (data.json)
+        const population = county.popData[safeYear] || 0;
+
+        // Arányosítjuk: 1 fő = 0.15 méter 
+        return population * 0.15;
+        }, false),
         topRadius: 7000,
         bottomRadius: 7000,
         material: Color.CYAN.withAlpha(0.7),
