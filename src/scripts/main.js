@@ -27,7 +27,6 @@ async function initVisualization() {
   const response = await fetch('./data.json');
   const counties = await response.json();
 
-  //ui setup hivasa
   setupUI(viewer, counties);
 
   counties.forEach(county => {
@@ -39,17 +38,13 @@ async function initVisualization() {
       }, false),
       cylinder: {
         length: new CallbackProperty((time) => {
-        //Óra ellenőrzése
         const date = JulianDate.toDate(time);
         const year = date.getFullYear();
 
-        //Fixalas hogy ne fusson ki a databol (2001-2024)
         const safeYear = Math.min(Math.max(year, 2001), 2024);
 
-        //Kivesszük a népességet a jsonbol (data.json)
         const population = county.popData[safeYear] || 0;
 
-        //Arányosítjuk: 1 fő = 0.3 méter 
         return population * 0.3;
         }, false),
         topRadius: 7000,
@@ -59,7 +54,6 @@ async function initVisualization() {
           const safeYear = Math.min(Math.max(year, 2001), 2024);
           const pop = county.popData[safeYear] || 0;
           
-          // Színkódolás a tömeg alapján
           if (pop > 1000000) return Color.ORANGERED.withAlpha(0.8); //Pirosas szín a legnagyobb megyéknél
           if (pop > 500000) return Color.GOLD.withAlpha(0.8); //Sárgás szín a nagyobb megyéknél
           return Color.CYAN.withAlpha(0.7); //Kékes szín a kisebb megyéknél
@@ -81,7 +75,7 @@ async function initVisualization() {
     });
   });
 }
-// Kamera beállítása Magyarország középpontjára
+
 viewer.camera.flyTo({
   destination: Cartesian3.fromDegrees(19.50, 43.0, 650000), 
   orientation: {

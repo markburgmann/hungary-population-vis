@@ -9,7 +9,6 @@ export function setupUI(viewer, counties) {
         const year = date.getFullYear();
         const safeYear = Math.min(Math.max(year, 2001), 2024);
         
-        // Csak akkor frissítjük a DOM-ot, ha tényleg változott az év
         if (yearElement.textContent !== String(safeYear)) {
             yearElement.textContent = safeYear;
         }
