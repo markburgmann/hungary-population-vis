@@ -16,7 +16,7 @@ html, body {
 #ui-overlay {
     position: absolute;
     top: 20px;
-    left: 85%;
+    left: 10%;
     transform: translateX(-40%);
     text-align: center;
     color: white;
