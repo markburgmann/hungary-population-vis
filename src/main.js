@@ -1,4 +1,4 @@
-import { Viewer, Cartesian3, Color, JulianDate, HeightReference, Math as CesiumMath, CallbackProperty } from 'cesium';
+import { Viewer, Cartesian3, Color, JulianDate, HeightReference, Math as CesiumMath, CallbackProperty, VerticalOrigin, ColorMaterialProperty } from 'cesium';
 import "cesium/Build/Cesium/Widgets/widgets.css";
 
 const viewer = new Viewer('cesiumContainer', {
@@ -42,14 +42,35 @@ async function initVisualization() {
         //Kivesszük a népességet a jsonbol (data.json)
         const population = county.popData[safeYear] || 0;
 
-        // Arányosítjuk: 1 fő = 0.15 méter 
+        //Arányosítjuk: 1 fő = 0.15 méter 
         return population * 0.15;
         }, false),
         topRadius: 7000,
         bottomRadius: 7000,
-        material: Color.CYAN.withAlpha(0.7),
-        heightReference: HeightReference.RELATIVE_TO_GROUND
-      }
+        material: new ColorMaterialProperty(new CallbackProperty((time) => {
+          const year = JulianDate.toDate(time).getFullYear();
+          const safeYear = Math.min(Math.max(year, 2001), 2024);
+          const pop = county.popData[safeYear] || 0;
+          
+          // Színkódolás a tömeg alapján
+          if (pop > 1000000) return Color.ORANGERED.withAlpha(0.8); //Pirosas szín a legnagyobb megyéknél
+          if (pop > 500000) return Color.GOLD.withAlpha(0.8); //Sárgás szín a nagyobb megyéknél
+          return Color.CYAN.withAlpha(0.7); //Kékes szín a kisebb megyéknél
+        }, false)),
+        outline: true,
+        outlineColor: Color.WHITE,
+        heightReference: HeightReference.RELATIVE_TO_GROUND,
+      },
+        label: {
+          text: county.name,
+          font: '14px sans-serif',
+          style: Color.WHITE,
+          outlineWidth: 2,
+          outlineColor: Color.BLACK,
+          verticalOrigin: VerticalOrigin.BOTTOM,
+          pixelOffset: new Cartesian3(0, -20, 0), 
+          eyeOffset: new Cartesian3(0, 0, -50000) // Hogy ne takarja el az oszlopot közelről
+        }
     });
   });
 }
