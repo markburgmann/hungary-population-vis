@@ -1,6 +1,6 @@
 import { Viewer, Cartesian3, Color, JulianDate, HeightReference, Math as CesiumMath, CallbackProperty, VerticalOrigin, ColorMaterialProperty } from 'cesium';
 import "cesium/Build/Cesium/Widgets/widgets.css";
-import { setupUI } from './ui.js';
+import { setupUI, getCountyDescription } from './ui.js';
 
 const viewer = new Viewer('cesiumContainer', {
     terrainProvider: null,
@@ -34,6 +34,9 @@ async function initVisualization() {
     viewer.entities.add({
       name: county.name,
       position: Cartesian3.fromDegrees(county.lon, county.lat),
+      description: new CallbackProperty((time) => {
+        return getCountyDescription(county, time);
+      }, false),
       cylinder: {
         length: new CallbackProperty((time) => {
         //Óra ellenőrzése
@@ -64,16 +67,16 @@ async function initVisualization() {
         outline: true,
         outlineColor: Color.WHITE,
         heightReference: HeightReference.RELATIVE_TO_GROUND,
-      },
+        },
         label: {
           text: county.name,
           font: '14px sans-serif',
-          style: Color.WHITE,
+          style: Color.BLACK,
           outlineWidth: 2,
-          outlineColor: Color.BLACK,
+          outlineColor: Color.WHITE,
           verticalOrigin: VerticalOrigin.BOTTOM,
-          pixelOffset: new Cartesian3(0, -20, 0), 
-          eyeOffset: new Cartesian3(0, 0, -50000) // Hogy ne takarja el az oszlopot közelről
+          pixelOffset: new Cartesian3(0, 25, 3000), 
+          eyeOffset: new Cartesian3(0, 0, -5000)
         }
     });
   });
