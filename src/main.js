@@ -76,10 +76,10 @@ async function initVisualization() {
 }
 // Kamera beállítása Magyarország középpontjára
 viewer.camera.flyTo({
-  destination: Cartesian3.fromDegrees(19.50, 47.16, 1000000), // 1000 km magasból
+  destination: Cartesian3.fromDegrees(19.50, 43.0, 650000), 
   orientation: {
     heading: CesiumMath.toRadians(0.0),
-    pitch: CesiumMath.toRadians(-90.0), // Függőlegesen lefelé néz
+    pitch: CesiumMath.toRadians(-55.0), 
     roll: 0.0
   }
 });
