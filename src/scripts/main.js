@@ -49,8 +49,8 @@ async function initVisualization() {
         //Kivesszük a népességet a jsonbol (data.json)
         const population = county.popData[safeYear] || 0;
 
-        //Arányosítjuk: 1 fő = 0.15 méter 
-        return population * 0.15;
+        //Arányosítjuk: 1 fő = 0.3 méter 
+        return population * 0.3;
         }, false),
         topRadius: 7000,
         bottomRadius: 7000,
@@ -65,7 +65,7 @@ async function initVisualization() {
           return Color.CYAN.withAlpha(0.7); //Kékes szín a kisebb megyéknél
         }, false)),
         outline: true,
-        outlineColor: Color.WHITE,
+        outlineColor: Color.GRAY,
         heightReference: HeightReference.RELATIVE_TO_GROUND,
         },
         label: {
